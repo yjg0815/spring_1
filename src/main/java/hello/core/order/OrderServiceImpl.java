@@ -6,7 +6,10 @@ import hello.core.discount.RateDiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
 import hello.core.member.MemoryMemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrderServiceImpl implements OrderService{
 
     private final MemberRepository memberRepository;
@@ -22,7 +25,7 @@ public class OrderServiceImpl implements OrderService{
     // 어떻게 해결? 누군가 구체를 대신 생성해서 집어넣어줘야함
     // ==> AppConfig : 구현 객체를 생성하고, 연결하는 책임을 가지는 별도의 설정 클래스
 
-
+    @Autowired
     public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
