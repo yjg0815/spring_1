@@ -20,5 +20,13 @@ import org.springframework.context.annotation.FilterType;
 @Autowired를 사용하면 DI도 자동 주입 가능
  */
 
+/*
+1. 자동 빈 등록 vs 자동 빈 등록 ==> 오류가 잘 터져서 웬만하면 깔끔하게 해결 가능
+2. 자동 빈 등록 vs 수동 빈 등록 ==> 수동 빈이 자동 빈을 오버라이딩(수동 빈이 우선권)
+==> 오버라이딩 시. 로그가 replacing 이라고 남는다.
+==> 이게 문제가 돼서 스프링부트가 최근에는 오류가 나게 끔 바뀌었다고 한다.
+==> 만약 오버라이딩을 개발자가 의도한 것이라면, 위에 한줄만 overriding=true 하게 넣어주면 된다.
+ */
+
 public class AutoAppConfig {
 }
