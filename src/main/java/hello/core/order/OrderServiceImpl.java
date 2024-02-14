@@ -6,10 +6,23 @@ import hello.core.discount.RateDiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
 import hello.core.member.MemoryMemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+/*
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+
+    final로 받아야 하는 이런 코드를 자동으로 lombok에서 생성해줌
+
+    최근에 이걸 많이 사용한다고 한다.
+ */
+
 public class OrderServiceImpl implements OrderService{
 
     private final MemberRepository memberRepository;
@@ -24,12 +37,6 @@ public class OrderServiceImpl implements OrderService{
     // 근데 이렇게 하면 nullpointexception이 생김 => 당연함 실제 구체가 없으니까
     // 어떻게 해결? 누군가 구체를 대신 생성해서 집어넣어줘야함
     // ==> AppConfig : 구현 객체를 생성하고, 연결하는 책임을 가지는 별도의 설정 클래스
-
-    @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    }
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
