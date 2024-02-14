@@ -6,7 +6,7 @@ import org.springframework.context.annotation.FilterType;
 
 @Configuration
 @ComponentScan(
-        basePackages = "hello.core.member",
+        //basePackages = "hello.core.member",
         // 어디서부터 하위로 내려들어가서 찾을건지 지정 가능, 여러개 지정 가능
         // 지정 안하면 얘가 붙은 패키지 부터 그 하위에 있는 것들을 뒤짐
         //웬만하면 프로젝트 최상단에 설정정보가 있는 appconfig를 두자.
