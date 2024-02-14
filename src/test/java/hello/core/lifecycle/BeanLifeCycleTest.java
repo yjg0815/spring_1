@@ -20,9 +20,7 @@ public class BeanLifeCycleTest {
     @Configuration
     static class LifeCycleConfig{
 
-        @Bean(initMethod = "init", destroyMethod = "close")
-        //메서드 이름을 자유롭게 설정 가능하고, 스프링에 의존 x => 코드 못고치는 외부 라이브러리에서도 적용 가능
-        // destroyMethod => 기본값이 inferred로 설정 => close나 shutdown을 자동으로 찾아서 호출해줌
+        @Bean
         public NetworkClient networkClient() {
             NetworkClient networkClient = new NetworkClient();
             networkClient.setUrl("http://hello-spring.dev");
