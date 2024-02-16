@@ -2,13 +2,19 @@ package hello.core.scope;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
+import jakarta.inject.Provider;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
 
+
 import static org.assertj.core.api.Assertions.assertThat;
+
+
+//사실 프로토타입 빈을 쓰는 일은 굉장히 드물다고 한다...
 
 public class SingletonWithPrototypeTest1 {
 
@@ -32,17 +38,17 @@ public class SingletonWithPrototypeTest1 {
                 new AnnotationConfigApplicationContext(ClientBean.class, PrototypeBean.class);
 
         ClientBean clientBean1 = ac.getBean(ClientBean.class);
-        int count1 = clientBean1.login();
+        int count1 = clientBean1.logic();
         assertThat(count1).isEqualTo(1);
 
         ClientBean clientBean2 = ac.getBean(ClientBean.class);
-        int count2 = clientBean2.login();
-        assertThat(count2).isEqualTo(2);
+        int count2 = clientBean2.logic();
+        assertThat(count2).isEqualTo(1);
     }
 
     @Scope("singleton")
     static class ClientBean {
-        private final PrototypeBean prototypeBean;
+        //private final PrototypeBean prototypeBean;
         /*
         싱글톤 빈에서 필요한 프로토타입 빈이, 싱글톤 빈이 생성되는 시점에 이미 주입이 되었기 때문에,
         서로 다른 클라이언트가 싱글톤 빈인 클라이언트 빈을 요청했을 때,
@@ -52,12 +58,26 @@ public class SingletonWithPrototypeTest1 {
         사용할 때마다 새로 생성하게 만들고 싶은데 어떻게 할까..
          */
 
-        @Autowired
-        public ClientBean(PrototypeBean prototypeBean) {
-            this.prototypeBean = prototypeBean;
-        }
+        //@Autowired
+        //private ObjectProvider<PrototypeBean> prototypeBeanProvider;
+        // 스프링 컨테이너에서 Dependency lookup (DL)을 도와주는 역할
+        // 스프링 빈으로 등록 안해도 스프링이 자동으로 등록해줌
 
-        public int login() {
+        //스프링에 의존적인 방식 ==> 스프링에 의존하지 않는 방식 존재 : javax.provider
+
+        @Autowired
+        private Provider<PrototypeBean> prototypeBeanProvider;
+        // 자바 표준, 스프링에 의존적이지 않음
+        // 심플하다 but 별도의 라이브러리 필요
+        // 딱 DL 기능만 제공
+
+
+        public int logic() {
+           // PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
+            //get을 하면서 항상 새로운 프로토타입 빈을 생성
+
+            PrototypeBean prototypeBean = prototypeBeanProvider.get();
+
             prototypeBean.addCount();
             int count = prototypeBean.getCount();
             return count;
